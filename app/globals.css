@@ -1,0 +1,218 @@
+/* Import Google Fonts - must be before tailwind */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+/* Design Tokens */
+:root {
+  /* Primary Colors */
+  --electric-blue: #1677FF;
+  --electric-blue-light: #4096FF;
+  --electric-blue-dark: #0958D9;
+
+  /* Accent Colors */
+  --voltage-orange: #FF8C00;
+  --voltage-orange-light: #FFA940;
+  --voltage-orange-dark: #D46B08;
+
+  /* Dark Theme */
+  --industrial-gray: #111827;
+  --industrial-gray-light: #1F2937;
+  --industrial-gray-lighter: #374151;
+
+  /* Light Theme */
+  --off-white: #F9FAFB;
+  --light-gray: #F3F4F6;
+  --medium-gray: #E5E7EB;
+
+  /* Text Colors */
+  --text-dark: #111827;
+  --text-light: #F9FAFB;
+  --text-muted: #9CA3AF;
+  --text-muted-dark: #6B7280;
+
+  /* Background */
+  --background: #ffffff;
+  --foreground: #111827;
+}
+
+/* Tailwind v4 Theme Extension */
+@theme inline {
+  /* Colors */
+  --color-electric-blue: var(--electric-blue);
+  --color-electric-blue-light: var(--electric-blue-light);
+  --color-electric-blue-dark: var(--electric-blue-dark);
+  --color-voltage-orange: var(--voltage-orange);
+  --color-voltage-orange-light: var(--voltage-orange-light);
+  --color-voltage-orange-dark: var(--voltage-orange-dark);
+  --color-industrial-gray: var(--industrial-gray);
+  --color-industrial-gray-light: var(--industrial-gray-light);
+  --color-industrial-gray-lighter: var(--industrial-gray-lighter);
+  --color-off-white: var(--off-white);
+  --color-light-gray: var(--light-gray);
+  --color-medium-gray: var(--medium-gray);
+  --color-text-dark: var(--text-dark);
+  --color-text-light: var(--text-light);
+  --color-text-muted: var(--text-muted);
+  --color-text-muted-dark: var(--text-muted-dark);
+
+  /* Fonts */
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-slide-up: slide-up 0.6s ease-out;
+  --animate-slide-down: slide-down 0.6s ease-out;
+  --animate-slide-left: slide-left 0.6s ease-out;
+  --animate-slide-right: slide-right 0.6s ease-out;
+  --animate-scale-in: scale-in 0.5s ease-out;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-circuit-flow: circuit-flow 3s linear infinite;
+}
+
+/* Keyframes */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-left {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-right {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(22, 119, 255, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(22, 119, 255, 0.6); }
+}
+
+@keyframes circuit-flow {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--industrial-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--electric-blue);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--electric-blue-light);
+}
+
+/* Selection */
+::selection {
+  background: var(--electric-blue);
+  color: white;
+}
+
+/* Focus Styles */
+:focus-visible {
+  outline: 2px solid var(--electric-blue);
+  outline-offset: 2px;
+}
+
+/* Circuit Pattern Background Utility */
+.circuit-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L30 15 M30 45 L30 60 M0 30 L15 30 M45 30 L60 30 M15 15 L15 30 L30 30 M45 45 L45 30 L30 30' stroke='%231677FF' stroke-width='0.5' fill='none' opacity='0.15'/%3E%3Ccircle cx='30' cy='30' r='3' fill='%231677FF' opacity='0.2'/%3E%3Ccircle cx='15' cy='15' r='2' fill='%231677FF' opacity='0.15'/%3E%3Ccircle cx='45' cy='45' r='2' fill='%231677FF' opacity='0.15'/%3E%3C/svg%3E");
+  background-size: 60px 60px;
+}
+
+/* Gradient text utility */
+.text-gradient {
+  background: linear-gradient(135deg, var(--electric-blue) 0%, var(--electric-blue-light) 50%, var(--voltage-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Electric glow effect */
+.electric-glow {
+  box-shadow: 0 0 20px rgba(22, 119, 255, 0.4), 0 0 40px rgba(22, 119, 255, 0.2);
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Button shine effect */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  transform: rotate(45deg);
+  transition: left 0.6s ease;
+}
+
+.btn-shine:hover::after {
+  left: 100%;
+}
