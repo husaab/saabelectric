@@ -1,114 +1,388 @@
-import type { Metadata } from 'next';
-import { ArrowRight, Home, Shield, Zap } from 'lucide-react';
-import { Section, Container, AnimatedSection, Card, Button } from '@/components/ui';
-import { ServiceHero, ServiceList } from '@/components/services';
-import { SERVICES } from '@/lib/constants';
+"use client";
 
-export const metadata: Metadata = {
-  title: 'Residential Electrical Services',
-  description:
-    'Professional residential electrical services including general wiring, service upgrades, EV charging stations, renovations, and emergency repairs.',
+import Image from "next/image";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, ChevronDown } from "lucide-react";
+import { useState } from "react";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Animation Variants
+   ═══════════════════════════════════════════════════════════════════════════ */
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
 };
 
-const service = SERVICES.residential;
+const staggerContainer = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
 
-const serviceCategories = [
+/* ═══════════════════════════════════════════════════════════════════════════
+   Navigation Types & Data
+   ═══════════════════════════════════════════════════════════════════════════ */
+interface NavChild {
+  label: string;
+  href: string;
+}
+
+interface NavLink {
+  label: string;
+  href?: string;
+  children?: NavChild[];
+}
+
+const navLinks: NavLink[] = [
+  { label: "Home", href: "/" },
   {
-    title: 'Wiring & Upgrades',
-    icon: Zap,
-    items: ['General wiring', 'Service upgrades', 'Service Panel Upgrade', 'Aluminum to Copper Rewiring'],
+    label: "Services",
+    children: [
+      { label: "Commercial", href: "/services/commercial" },
+      { label: "Residential", href: "/services/residential" },
+      { label: "Industrial", href: "/services/industrial" },
+    ],
   },
-  {
-    title: 'Specialized Services',
-    icon: Home,
-    items: ['Electric Vehicle Charging Stations', 'In floor heating', 'Emergency lighting', 'Knob & Tube Replacement'],
-  },
-  {
-    title: 'Repairs & Renovations',
-    icon: Shield,
-    items: ['Renovations', 'Repairs', 'Emergency services', 'Troubleshooting'],
-  },
+  { label: "Projects", href: "/projects" },
+  { label: "About", href: "/about" },
+  { label: "Our Values", href: "/values" },
+  { label: "Contact", href: "/contact" },
 ];
 
-export default function ResidentialPage() {
+/* ═══════════════════════════════════════════════════════════════════════════
+   Navbar with Dropdown
+   ═══════════════════════════════════════════════════════════════════════════ */
+function Navbar() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [servicesExpanded, setServicesExpanded] = useState(false);
+
+  return (
+    <header className="navbar">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <nav className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3">
+            <Image
+              src="/images/logo-icon.png"
+              alt="Saab Electric"
+              width={44}
+              height={44}
+              className="w-11 h-11"
+            />
+            <span className="logo-text">Saab Electric</span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) =>
+              link.children ? (
+                <div key={link.label} className="nav-dropdown-container">
+                  <button className="nav-dropdown-trigger">
+                    {link.label}
+                    <ChevronDown className="nav-dropdown-chevron" />
+                  </button>
+                  <div className="nav-dropdown-menu">
+                    {link.children.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        className="nav-dropdown-item"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link key={link.href} href={link.href!} className="nav-link">
+                  {link.label}
+                </Link>
+              )
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </nav>
+
+        {/* Mobile Navigation */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="md:hidden pb-6"
+          >
+            <div className="flex flex-col gap-4">
+              {navLinks.map((link) =>
+                link.children ? (
+                  <div key={link.label}>
+                    <button
+                      className="mobile-submenu-trigger"
+                      onClick={() => setServicesExpanded(!servicesExpanded)}
+                    >
+                      {link.label}
+                      <ChevronDown
+                        className={`mobile-submenu-chevron ${
+                          servicesExpanded ? "expanded" : ""
+                        }`}
+                      />
+                    </button>
+                    <AnimatePresence>
+                      {servicesExpanded && (
+                        <motion.div
+                          className="mobile-submenu"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {link.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className="mobile-submenu-item"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href!}
+                    className="nav-link text-lg"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </header>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Residential Hero Section
+   ═══════════════════════════════════════════════════════════════════════════ */
+function ResidentialHero() {
+  return (
+    <section className="service-hero">
+      <Image
+        src="/images/residential-services.jpg"
+        alt="Residential electrical services"
+        fill
+        sizes="100vw"
+        quality={100}
+        style={{ objectFit: "cover" }}
+        priority
+      />
+      <motion.div
+        className="service-hero-overlay"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.h1
+          className="service-hero-title"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          Residential Services
+        </motion.h1>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Residential Intro Section
+   ═══════════════════════════════════════════════════════════════════════════ */
+function ResidentialIntro() {
+  return (
+    <section className="service-intro">
+      <motion.div
+        className="service-intro-inner"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={staggerContainer}
+      >
+        <motion.p
+          className="service-intro-text"
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+        >
+          The core of our business is providing electrical contracting services
+          to new and existing residential properties. Our electrical contractors
+          are dependable, reliable with a proven track record of getting the job
+          done. Whether it&apos;s repairs or you&apos;re building your dream home and
+          require an electrical contractor, we are here to help.
+        </motion.p>
+
+        <motion.p
+          className="service-intro-text"
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+        >
+          Our contractors work with you to carry out original designs or help
+          you design a system that is the right fit for your home. All work
+          adheres to the Ontario Electrical Code and inspections are done by the
+          Electrical Safety Authority (ESA).
+        </motion.p>
+
+        <motion.p
+          className="service-intro-lead"
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+        >
+          Saab Electric offers residential services including:
+        </motion.p>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Residential Services List
+   ═══════════════════════════════════════════════════════════════════════════ */
+function ResidentialServices() {
+  const services = [
+    "General wiring",
+    "Service upgrades",
+    "Service Panel Upgrade",
+    "Emergency lighting",
+    "Renovations",
+    "Repairs",
+    "Knob & Tube Replacement",
+    "Aluminum to Copper Rewiring",
+    "Electric Vehicle Charging Stations",
+    "In floor heating",
+  ];
+
+  return (
+    <section className="service-areas">
+      <motion.div
+        className="service-areas-inner"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={staggerContainer}
+      >
+        <motion.div className="service-area-card" variants={fadeInUp}>
+          <h3 className="service-area-title">Our Residential Services</h3>
+          <ul className="service-area-list residential-services-list">
+            {services.map((service, index) => (
+              <li key={index} className="service-area-list-item">
+                {service}
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Footer
+   ═══════════════════════════════════════════════════════════════════════════ */
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="footer-grid">
+          {/* Column 1: Logo & Tagline */}
+          <div>
+            <h3 className="footer-logo">Saab Electric</h3>
+            <p className="footer-tagline">
+              Professional electrical services for residential, commercial, and
+              industrial projects across the GTA since 2000.
+            </p>
+          </div>
+
+          {/* Column 2: Quick Links */}
+          <div>
+            <h4 className="footer-heading">Services</h4>
+            <nav className="footer-links">
+              <Link href="/services/commercial" className="footer-link">
+                Commercial
+              </Link>
+              <Link href="/services/residential" className="footer-link">
+                Residential
+              </Link>
+              <Link href="/services/industrial" className="footer-link">
+                Industrial
+              </Link>
+              <Link href="/projects" className="footer-link">
+                Projects
+              </Link>
+              <Link href="/contact" className="footer-link">
+                Contact
+              </Link>
+            </nav>
+          </div>
+
+          {/* Column 3: Contact Info */}
+          <div>
+            <h4 className="footer-heading">Contact</h4>
+            <div className="footer-contact-item">
+              421 Nugget Ave
+              <br />
+              North York, ON
+            </div>
+            <div className="footer-contact-item">
+              <a href="tel:+14165551234">(416) 555-1234</a>
+            </div>
+            <div className="footer-contact-item">
+              <a href="mailto:info@saabelectric.ca">info@saabelectric.ca</a>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="footer-bottom">
+          <p className="footer-copyright">
+            © {new Date().getFullYear()} Saab Electric. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Main Page
+   ═══════════════════════════════════════════════════════════════════════════ */
+export default function ResidentialServicesPage() {
   return (
     <>
-      <ServiceHero
-        title="Residential Services"
-        description="The core of our business is providing electrical contracting services to new and existing residential properties. Our electrical contractors are dependable, reliable with a proven track record of getting the job done."
-        badge="Residential"
-      />
-
-      {/* Main Content */}
-      <Section>
-        <Container>
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            <AnimatedSection>
-              <h2 className="font-heading text-3xl font-bold text-text-dark mb-6">
-                Complete Residential Electrical Solutions
-              </h2>
-              <div className="prose prose-lg text-text-muted-dark mb-8">
-                <p>
-                  Whether it&apos;s repairs or you&apos;re building your dream home and require an electrical
-                  contractor, we are here to help. Our contractors work with you to carry out original
-                  designs or help you design a system that is the right fit for your home.
-                </p>
-                <p>
-                  All work adheres to the Ontario Electrical Code and inspections are done by the
-                  Electrical Safety Authority (ESA).
-                </p>
-              </div>
-            </AnimatedSection>
-
-            <AnimatedSection delay={0.2}>
-              <Card>
-                <h3 className="font-heading text-xl font-semibold text-text-dark mb-6">
-                  Our Residential Services
-                </h3>
-                <ServiceList items={service.items} />
-              </Card>
-            </AnimatedSection>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Service Categories */}
-      <section className="py-20 bg-gray-50">
-        <Container>
-          <AnimatedSection className="text-center mb-12">
-            <h2 className="font-heading text-3xl font-bold text-gray-900 mb-4">
-              Service Categories
-            </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto">
-              We offer comprehensive residential electrical services to meet all your needs.
-            </p>
-          </AnimatedSection>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {serviceCategories.map((category, index) => (
-              <AnimatedSection key={category.title} delay={index * 0.15}>
-                <Card className="h-full">
-                  <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-4">
-                    <category.icon className="w-6 h-6 text-blue-700" />
-                  </div>
-                  <h3 className="font-heading text-xl font-semibold text-gray-900 mb-4">
-                    {category.title}
-                  </h3>
-                  <ul className="space-y-2">
-                    {category.items.map((item) => (
-                      <li key={item} className="text-gray-500 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-700" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              </AnimatedSection>
-            ))}
-          </div>
-        </Container>
-      </section>
-
+      <Navbar />
+      <main>
+        <ResidentialHero />
+        <ResidentialIntro />
+        <ResidentialServices />
+      </main>
+      <Footer />
     </>
   );
 }

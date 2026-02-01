@@ -178,31 +178,31 @@ function Navbar() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   About Hero Section
+   Values Hero Section
    ═══════════════════════════════════════════════════════════════════════════ */
-function AboutHero() {
+function ValuesHero() {
   return (
-    <section className="about-hero">
+    <section className="values-hero">
       <Image
-        src="/images/commercial.jpg"
-        alt="Saab Electric team and services"
+        src="/images/values-hero.jpg"
+        alt="Handshake representing our values"
         fill
         style={{ objectFit: "cover" }}
         priority
       />
       <motion.div
-        className="about-hero-overlay"
+        className="values-hero-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
         <motion.h1
-          className="about-hero-title"
+          className="values-hero-title"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          About Us
+          Our Values
         </motion.h1>
       </motion.div>
     </section>
@@ -210,49 +210,113 @@ function AboutHero() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   About Content Section
+   Mission Statement Section
    ═══════════════════════════════════════════════════════════════════════════ */
-function AboutContent() {
+function MissionStatement() {
   return (
-    <section className="about-content">
+    <section className="mission-section">
       <motion.div
-        className="about-content-inner"
+        className="mission-inner"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
         variants={staggerContainer}
       >
         <motion.h2
-          className="about-heading"
+          className="mission-heading"
           variants={fadeInUp}
           transition={{ duration: 0.6 }}
         >
-          Building the Future
+          Mission Statement
         </motion.h2>
 
         <motion.p
-          className="about-paragraph"
+          className="mission-text"
           variants={fadeInUp}
           transition={{ duration: 0.6 }}
         >
-          Saab Electric Inc. is an electrical contracting company based in Toronto, Ontario, Canada. We have been serving our customers in the Greater Toronto Area (GTA) since 2000. Our customers have included homeowners, renovators, general contractors, property management companies, residential apartment buildings, condominiums, office buildings, industrial buildings, factories, and community centers both renovations and new construction.
+          Our mission is to provide excellent professional electrical contracting services to our customers in the residential, commercial and industrial sectors. These services include installations, maintenance and repairs. We strive to meet and exceed customer expectations. Safety and efficiency are achieved through rigorous training and continuous improvement in whatever we do.
         </motion.p>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Core Values Section
+   ═══════════════════════════════════════════════════════════════════════════ */
+const coreValues = [
+  {
+    title: "Respect",
+    description: "We respect our customers and value their loyalty and trust. We believe respect must be earned. We strive to earn and keep the respect of our customers, vendors and the people we interact with. We have the expectation of our team members to respect each others and those they interact with.",
+  },
+  {
+    title: "Commitment",
+    description: "We are committed to delivering quality work in a timely manner to our customers and clients.",
+  },
+  {
+    title: "Quality",
+    description: "Providing quality services is a top priority at Saab Electric. Our work is a reflection of our efforts to provide quality work to our customers.",
+  },
+  {
+    title: "Improvement",
+    description: "We continuously strive to improve our service, products and processes. We ensure our team members are trained and up to date with industry standards.",
+  },
+  {
+    title: "Efficiency",
+    description: "We do our utmost to live up to our client expectations. We have implemented processes to ensure efficiency at all levels, from project planning, coordination to onsite work. Open lines of communication with contractors, engineers, architects and customers ensures completed work in a timely manner.",
+  },
+  {
+    title: "Integrity",
+    description: "We are consistent in our values and actions. The satisfaction of our customers is a testament of that.",
+  },
+];
+
+function CoreValues() {
+  return (
+    <section className="values-section">
+      <motion.div
+        className="values-intro"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={staggerContainer}
+      >
+        <motion.h2
+          className="values-intro-heading"
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+        >
+          Our Core Values
+        </motion.h2>
 
         <motion.p
-          className="about-paragraph"
+          className="values-intro-text"
           variants={fadeInUp}
           transition={{ duration: 0.6 }}
         >
-          We pride ourselves on doing quality work in a timely manner. Most of our customers are repeat, satisfied customers. We stand by our core values of Respect, Commitment, Quality, Improvement, Efficiency, and Integrity.
+          At Saab Electric, we believe in providing a great experience for our customers and our core values define who we are, our accountability and what we aspire to.
         </motion.p>
+      </motion.div>
 
-        <motion.p
-          className="about-paragraph"
-          variants={fadeInUp}
-          transition={{ duration: 0.6 }}
-        >
-          Our professional and committed team of Office Support Staff, Operation Managers, Estimators, Project Managers, Lead hands, and Electricians will be happy to assist you with your electrical projects. We are insured and in good standing with the Workplace Safety and Insurance Board (WSIB). We are reliable, professional and we guarantee our work.
-        </motion.p>
+      <motion.div
+        className="values-grid"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={staggerContainer}
+      >
+        {coreValues.map((value) => (
+          <motion.div
+            key={value.title}
+            className="value-card"
+            variants={fadeInUp}
+            transition={{ duration: 0.5 }}
+          >
+            <h3 className="value-title">{value.title}</h3>
+            <p className="value-description">{value.description}</p>
+          </motion.div>
+        ))}
       </motion.div>
     </section>
   );
@@ -317,13 +381,14 @@ function Footer() {
 /* ═══════════════════════════════════════════════════════════════════════════
    Main Page
    ═══════════════════════════════════════════════════════════════════════════ */
-export default function AboutPage() {
+export default function ValuesPage() {
   return (
     <>
       <Navbar />
       <main>
-        <AboutHero />
-        <AboutContent />
+        <ValuesHero />
+        <MissionStatement />
+        <CoreValues />
       </main>
       <Footer />
     </>
