@@ -234,7 +234,7 @@ function ContactSection() {
                 <div className="contact-info-content">
                   <span className="contact-info-label">Phone</span>
                   <span className="contact-info-value">
-                    <a href="tel:+14165551234">(416) 555-1234</a>
+                    <a href="tel:+14164026830">(416) 402-6830</a>
                   </span>
                 </div>
               </div>
@@ -311,7 +311,7 @@ function Footer() {
               North York, ON
             </div>
             <div className="footer-contact-item">
-              <a href="tel:+14165551234">(416) 555-1234</a>
+              <a href="tel:+14164026830">(416) 402-6830</a>
             </div>
             <div className="footer-contact-item">
               <a href="mailto:info@saabelectric.ca">info@saabelectric.ca</a>
