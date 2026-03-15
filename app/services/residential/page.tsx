@@ -351,7 +351,7 @@ function Footer() {
               North York, ON
             </div>
             <div className="footer-contact-item">
-              <a href="tel:+14164026830">(416) 402-6830</a>
+              <a href="tel:+14163657222">(416) 365-7222</a>
             </div>
             <div className="footer-contact-item">
               <a href="mailto:info@saabelectric.ca">info@saabelectric.ca</a>
